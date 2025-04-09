@@ -1,39 +1,24 @@
 import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+import bodyParser from "body-parser";
 const app = express();
 const PORT = 3000;
 
-app.all("/", (req, res) => {
-  const method = req.method;
-  let statusCode;
-  let message = `HTTP Method: ${method}`;
+const __filename = fileURLToPath(import.meta.url);
+// D:\CTI-Practiec\index.js
+const __dirname = path.dirname(__filename);
+// D:\CTI-Practiec ==> __dirname gives us the directory of a file
 
-  switch (method) {
-    case "GET":
-      statusCode = 200; // OK
-      break;
-    case "POST":
-      statusCode = 201; // Created
-      break;
-    case "PUT":
-      statusCode = 200; // OK
-      break;
-    case "DELETE":
-      statusCode = 204; // Deleted
-      break;
-    case "PATCH":
-      statusCode = 200; // OK
-      break;
-    case "OPTIONS":
-      statusCode = 204; // Deleted
-      break;
-    default:
-      statusCode = 405; // Method Not Allowed
-      message = ` Method ${method} not allowed`;
-  }
+app.use(bodyParser.urlencoded({ extended: true }));
 
-  res.status(statusCode).send({ method, statusCode, message });
+app.get("/", (req, res) => {
+  res.sendFile(`${__dirname}/public/index.html`);
 });
 
+app.post("/users", (req, res) => {
+  console.log(req.body);
+});
 app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
+  console.log(`The server is listening on port:${PORT}`);
 });
