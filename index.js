@@ -9,7 +9,14 @@ const __filename = fileURLToPath(import.meta.url);
 // D:\CTI-Practiec\index.js
 const __dirname = path.dirname(__filename);
 // D:\CTI-Practiec ==> __dirname gives us the directory of a file
-app.use(morgan("combined"));
+const customMiddleWare = (req, res, next) => {
+  console.log(
+    "Heyy, I am a custom middleware. Using next() is vital to have other middleware run as well"
+  );
+  next();
+};
+app.use(customMiddleWare);
+app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
