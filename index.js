@@ -1,4 +1,5 @@
 import express from "express";
+import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 const app = express();
@@ -8,7 +9,7 @@ const __filename = fileURLToPath(import.meta.url);
 // D:\CTI-Practiec\index.js
 const __dirname = path.dirname(__filename);
 // D:\CTI-Practiec ==> __dirname gives us the directory of a file
-
+app.use(morgan("combined"));
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
