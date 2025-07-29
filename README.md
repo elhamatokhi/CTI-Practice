@@ -2,7 +2,7 @@
 
 This is a Node.js + Express web application that connects to a PostgreSQL database to run a province-guessing game based on Afghanistan’s districts. Users are shown a random district and must guess the correct province. The app keeps score and offers hints based on regions.
 
-![image.png](public\css\images\image.png)
+![District Guessing Game Screenshot](./public/images/image.png)
 
 ## Here’s a **refactored `README.md`** based on your code and its functionality:
 
