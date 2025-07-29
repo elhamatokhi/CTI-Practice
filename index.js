@@ -98,9 +98,36 @@ app.post("/check", (req, res) => {
     );
   }
   if (action === "hint") {
+    pool.query(
+      'SELECT region FROM "Districts" where district = $1',
+      [district],
+      (err, result) => {
+        if (err) {
+          console.error("Something went wrong during executing query", err);
+          res.status(500).send("خطا X!");
+        } else {
+          if (result.rows.length > 0) {
+            hintRegion = result.rows[0].region;
+            hintDistrict = district;
+            res.redirect("/");
+          } else {
+            res.send("District not found.");
+          }
+        }
+      }
+    );
   }
 });
 
+app.get("/gameover", (req, res) => {
+  res.render("gameover");
+});
+
+app.post("/reset", (req, res) => {
+  userScore = 0;
+  hintRegion = undefined;
+  res.redirect("/");
+});
 app.listen(PORT, () => {
   console.log("Server is listening...");
 });
