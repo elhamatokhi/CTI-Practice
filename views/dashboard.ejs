@@ -1,0 +1,40 @@
+<!-- views/dashboard.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard | FoodieHub</title>
+    <link rel="stylesheet" href="./css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Dashboard</h1>
+      <nav>
+        <a href="/">Home</a> |
+        <a href="/logout">Logout</a>
+      </nav>
+    </header>
+
+    <main>
+      <h2>Welcome, <%= user.name %>!</h2>
+
+      <section>
+        <h3>Your Restaurants</h3>
+        <% if (restaurants.length > 0) { %>
+        <ul>
+          <% restaurants.forEach(r => { %>
+          <li><strong><%= r.name %></strong> — <%= r.cuisine %></li>
+          <% }); %>
+        </ul>
+        <% } else { %>
+        <p>No restaurants added yet.</p>
+        <% } %>
+        <a href="/restaurants/new" class="btn">Add New Restaurant</a>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 FoodieHub</p>
+    </footer>
+  </body>
+</html>
