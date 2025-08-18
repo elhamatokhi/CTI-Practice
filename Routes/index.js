@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { loginUser, registerUser } from "../controllers/authController.js";
-
 const router = Router();
 
 router.get("/", (req, res) => {
@@ -8,13 +7,18 @@ router.get("/", (req, res) => {
 });
 
 router.get("/dashboard", (req, res) => {
-  res.render("dashboard", { user: null, name: null });
+  if (req.isAuthenticated()) {
+    res.render("dashboard");
+  } else {
+    res.redirect("/login");
+  }
 });
 
 // GET /register — renders registration form
 router.get("/register", (req, res) => {
   res.render("auth", { formType: "register" });
 });
+
 router.post("/register", registerUser);
 
 // GET /login — renders login form
