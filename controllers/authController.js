@@ -38,31 +38,51 @@ export const registerUser = async (req, res) => {
 
 // Login logic
 
-export const loginUser = async (req, res) => {
-  const email = req.body.email;
-  const loginPassword = req.body.password;
+// export const loginUser = async (req, res) => {
+//   const email = req.body.email;
+//   const loginPassword = req.body.password;
 
-  try {
-    const result = await pool.query(`SELECT * FROM users WHERE email = $1`, [
-      email,
-    ]);
+//   try {
+//     const result = await pool.query(`SELECT * FROM users WHERE email = $1`, [
+//       email,
+//     ]);
 
-    if (result.rows.length > 0) {
-      const user = result.rows[0];
-      const storedPassword = user.password;
+//     if (result.rows.length > 0) {
+//       const user = result.rows[0];
+//       const storedPassword = user.password;
 
-      bcrypt.compare(loginPassword, storedPassword, (err, result) => {
-        if (result) {
-          res.render("dashboard", { user, restaurants: [] });
-        } else {
-          res.send(`Wrong password!`);
-        }
+//       bcrypt.compare(loginPassword, storedPassword, (err, result) => {
+//         if (result) {
+//           res.render("dashboard", { user, restaurants: [] });
+//         } else {
+//           res.send(`Wrong password!`);
+//         }
+//       });
+//     } else {
+//       res.send("User not found!");
+//     }
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// };
+
+// Loign
+
+export const loginUser = (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return res.status(500).json({ message: "Internal server error" });
+    if (!user)
+      return res
+        .status(401)
+        .json({ message: info?.message || "Invalid credentials" });
+
+    req.logIn(user, (err) => {
+      if (err) return res.status(500).json({ message: "Login failed" });
+      return res.json({
+        message: "Login successful",
+        user: { id: user.id, name: user.name },
       });
-    } else {
-      res.send("User not found!");
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
+    });
+  })(req, res, next);
 };

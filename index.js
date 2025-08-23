@@ -6,6 +6,7 @@ import router from "./Routes/index.js";
 import session from "express-session";
 import passport from "passport";
 import { Strategy } from "passport-local";
+
 /**
  *
  * Pool in pg is a connection manager that efficiently handles
@@ -27,17 +28,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
+    // maintain login state across requests.
     secret: "Passwordkey",
-    resave: false, // no update if no change to cart
+    resave: false, // no update if no change to cart , // resource friendly
     saveUninitialized: true, // creates a cookie for a new user
   })
 );
 
-app.use(passport.initialize());
-app.use(passport.session()); // To manage the state of users
+// local-passport
+app.use(passport.initialize()); // initializes the passport
+app.use(passport.session()); // Enables use of session - usually JWT is preferred over session
+
 app.set("view engine", "ejs");
 
-passport.use(new Strategy(function verify(username, password, cb) {}));
 app.use("/", router);
 app.listen(PORT, () => {
   console.log("Server is listening...");
